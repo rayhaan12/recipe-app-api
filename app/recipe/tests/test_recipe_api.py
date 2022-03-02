@@ -199,7 +199,6 @@ class PrivateRecipeApiTests(TestCase):
         """Test updating a recipe with a PUT"""
         recipe = sample_recipe(user=self.user)
         recipe.tags.add(sample_tag(user=self.user))
-        print(recipe.tags.all())
         payload = {
             'title': 'Carbonara',
             'time_minutes': 25,
@@ -209,7 +208,6 @@ class PrivateRecipeApiTests(TestCase):
         self.client.put(url, payload)
 
         recipe.refresh_from_db()
-        print(recipe.tags.all())
 
         self.assertEqual(recipe.title, payload['title'])
         self.assertEqual(recipe.time_minutes, payload['time_minutes'])
