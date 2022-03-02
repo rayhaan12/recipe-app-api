@@ -128,5 +128,15 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/2.1/howto/static-files/
 
 STATIC_URL = '/static/'
+MEDIA_URL = '/media/'
+
+MEDIA_ROOT = '/vol/web/media'
+STATIC_ROOT = 'vol/web/static'
+# STATIC_ROOT --> Where all the static files will be dumped when the project
+# is built, Django has a built-in command 'CollectStaticFiles()' which will
+# collect static files from all dependencies and combine them all to be
+# stored in the STATIC_ROOT.
+# When starting a project, this will pull all CSS and JS that is required for
+# the DRF browsable API and Django Admin
 
 AUTH_USER_MODEL = 'core.User'

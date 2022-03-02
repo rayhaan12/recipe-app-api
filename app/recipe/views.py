@@ -56,4 +56,10 @@ class RecipeViewset(viewsets.ModelViewSet):
 
     def perform_create(self, serializer):
         """Create a new recipe"""
+        # This is all thats needed to create an object, built in function of
+        # the ModelViewSet class
+        # Default functionality: pass in a serializer class that is assigned
+        # to a model, the MVS knows how to create new objects with
+        # the model when using an HTTP post
+        # Just assign an authenticated user to the model for it to work
         serializer.save(user=self.request.user)

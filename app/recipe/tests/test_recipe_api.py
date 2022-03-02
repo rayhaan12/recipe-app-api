@@ -172,3 +172,48 @@ class PrivateRecipeApiTests(TestCase):
         self.assertEqual(ingredients.count(), 2)
         self.assertIn(ing1, ingredients)
         self.assertIn(ing2, ingredients)
+
+    def test_partial_update_recipe(self):
+        """Test updating a recipe with PATCH"""
+        recipe = sample_recipe(user=self.user)
+        recipe.tags.add(sample_tag(user=self.user))
+        new_tag = sample_tag(user=self.user, name='Curry')
+        new_tag2 = sample_tag(user=self.user, name='Mutton')
+
+        payload = {'title': 'Chicken Tikka', 'tags': [new_tag.id, new_tag2.id]}
+        # When updating an object, use 'detail_url()' and pass in the object id
+        # This url can then be used when retrieving the response
+        url = detail_url(recipe.id)
+        # The response is does not have to be assigned to a variable
+        # as 'refresh_from_db()' will be applied
+        self.client.patch(url, payload)
+        # retrieves values from the updated db
+        recipe.refresh_from_db()
+
+        self.assertEqual(recipe.title, payload['title'])
+        # 'tags' saves as type queryset
+        tags = recipe.tags.all()
+        self.assertEqual(len(tags), 2)
+
+    def test_full_update_recipe(self):
+        """Test updating a recipe with a PUT"""
+        recipe = sample_recipe(user=self.user)
+        recipe.tags.add(sample_tag(user=self.user))
+        print(recipe.tags.all())
+        payload = {
+            'title': 'Carbonara',
+            'time_minutes': 25,
+            'price': 5.00
+        }
+        url = detail_url(recipe.id)
+        self.client.put(url, payload)
+
+        recipe.refresh_from_db()
+        print(recipe.tags.all())
+
+        self.assertEqual(recipe.title, payload['title'])
+        self.assertEqual(recipe.time_minutes, payload['time_minutes'])
+        self.assertEqual(recipe.price, payload['price'])
+
+        tags = recipe.tags.all()
+        self.assertEqual(len(tags), 0)
